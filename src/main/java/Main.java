@@ -20,9 +20,6 @@ public class Main {
             return;
         }
 
-        // Query
-        Neo4jDatabase.query("");
-
         System.out.println("#### Merci d'avoir utilisé Network4J ####");
         // Close database session and connection
         try {
