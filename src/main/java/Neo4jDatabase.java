@@ -19,11 +19,21 @@ public class Neo4jDatabase {
 
     }
 
-    public static void calcShortestPath(String rack, String zone) {
+    public static boolean calcShortestPath(String rack, String zone) {
 
+        String cypherQuery = "MATCH path = allShortestPaths( (rack:Rack{zone:";
 
-        String cypherQuery = "MATCH path = allShortestPaths( (rack:Rack{zone:1,rack:1})-[:HOLDS|ROUTES|CONNECTS*]-(router:Router:Egress) )\n" +
-                "RETURN length(path) as hops, count(*) as count, rack.name as rack, router.name as rtr, router.ip as ip_rtr;";
+        try {
+            Integer.parseInt(rack);
+            Integer.parseInt(zone);
+
+            cypherQuery +=  zone + ",rack: " + rack + "})-[:HOLDS|ROUTES|CONNECTS*]-(router:Router:Egress) )\n" +
+                    "MATCH (router)-[:ROUTES]->(i:Interface)\n" +
+                    "RETURN length(path) as hops, count(*) as count, rack.name as rack, router.name as rtr, i.ip as ip_rtr;";
+
+        } catch (NumberFormatException e) {
+            return false;
+        }
 
         List<Record> result = query(cypherQuery);
 
@@ -37,6 +47,7 @@ public class Neo4jDatabase {
         }
 
         System.out.println();
+        return true;
     }
 
 

@@ -50,7 +50,9 @@ public class Main {
                     System.out.print("> Veuillez indiquer le numéro de la zone du rack: ");
                     String zone = in.nextLine();
 
-                    Neo4jDatabase.calcShortestPath(rack, zone);
+                    if(!Neo4jDatabase.calcShortestPath(rack, zone)) {
+                        System.out.println("> /!\\ Veuillez saisir des valeurs numériques /!\\");
+                    }
                     break;
             }
 
