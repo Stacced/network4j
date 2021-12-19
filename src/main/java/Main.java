@@ -41,7 +41,13 @@ public class Main {
                     Neo4jDatabase.getAllRacks();
                     break;
                 case "I-RTR":
-                    System.out.println("1");
+                    System.out.print("> Veuillez indiquer l'IP de sortie à laquelle associer le routeur de sortie: ");
+                    String ip = in.nextLine();
+
+                    System.out.print("> Veuillez indiquer le nom du routeur de sortie: ");
+                    String routerName = in.nextLine();
+
+                    Neo4jDatabase.addEgressRouter(ip, routerName);
                     break;
                 case "CR":
                     System.out.print("> Veuillez indiquer le numéro du rack de départ: ");

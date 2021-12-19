@@ -15,8 +15,19 @@ public class Neo4jDatabase {
     }
 
 
-    public static void addEgressRouter() {
+    public static void addEgressRouter(String outgoingIp, String egressRouterName) {
+        if (outgoingIp.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")) {
+            String cypherQuery = String.format("MATCH (if:Interface {ip:'%s'})\n" +
+                    "CREATE (if)<-[:ROUTES]-(egr:Router:Egress {name:'%s'});", outgoingIp, egressRouterName);
 
+            // Dans le cas où l'interface de sortie n'est pas trouvée, Neo4j va 'gracefully fail', c'est-à-dire qu'aucune exception
+            // ne sera relevée. On peut donc parfaitement ignorer le résultat final.
+            query(cypherQuery);
+
+            System.out.println("Routeur de sortie créé !");
+        } else {
+            System.out.println("L'IP entrée n'est pas une IPv4 valide, veuillez réessayer.");
+        }
     }
 
     public static boolean calcShortestPath(String rack, String zone) {
